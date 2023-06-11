@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+    <!-- 指定HDFS文件块副本数 -->
+    <property>
+        <name>dfs.replication</name>
+        <value>2</value>
+    </property>
+
+    <!-- 指定HDFS NN数据路径, 一般程序放在opt路径下, 数据放在var路径下 -->
+    <!--    <property>-->
+    <!--        <name>dfs.namenode.name.dir</name>-->
+    <!--        &lt;!&ndash;默认值：file://${hadoop.tmp.dir}/dfs/name&ndash;&gt;-->
+    <!--        <value>/var/hdp/hadoop/dfs/ha/name</value>-->
+    <!--    </property>-->
+    <!-- 指定HDFS DN数据路径 -->
+    <!--    <property>-->
+    <!--        <name>dfs.datanode.data.dir</name>-->
+    <!--        &lt;!&ndash;默认值：file://${hadoop.tmp.dir}/dfs/data&ndash;&gt;-->
+    <!--        <value>/var/hdp/hadoop/dfs/ha/data</value>-->
+    <!--    </property>-->
+
+    <!--配置HA的nameService-->
+    <!--在单namenode时, 只需要在core-site.xml中 指定 fs.defaultFs=hdfs://node:9000即可; 在HA模式下, 就需要进行配置,从core-site.xml中可以看到,配置了一个hdfs://mycluster,这里的mycluster,就需要在这里进行解析-->
+    <property>
+        <name>dfs.nameservices</name>
+        <value>mycluster</value>
+    </property>
+
+    <!--HA一对多-->
+    <property>
+        <name>dfs.ha.namenodes.mycluster</name>
+        <value>nn1,nn2</value>
+    </property>
+    <!--逻辑到物理映射-->
+    <!--NN端口-->
+    <property>
+        <name>dfs.namenode.rpc-address.mycluster.nn1</name>
+        <value>hdp1.com:8020</value>
+    </property>
+    <property>
+        <name>dfs.namenode.rpc-address.mycluster.nn2</name>
+        <value>hdp2.com:8020</value>
+    </property>
+    <!--WEB UI端口-->
+    <property>
+        <name>dfs.namenode.http-address.mycluster.nn1</name>
+        <value>hdp1.com:9870</value>
+    </property>
+    <property>
+        <name>dfs.namenode.http-address.mycluster.nn2</name>
+        <value>hdp2.com:9870</value>
+    </property>
+    <!--共享edits数据, 配置journalNode在哪些机器-->
+    <property>
+        <name>dfs.namenode.shared.edits.dir</name>
+        <!--qjournal:// 是前缀,默认端口是8485 后面跟的/字符串,是进行路径区分的,可能不同的集群使用了相同的journalNode, 导致数据混在一起, 这里使用路径进行区分, 不同的集群需要配置不同的路径-->
+        <value>qjournal://hdp1.com:8485;hdp2.com:8485;hdp3.com:8485/mycluste</value>
+    </property>
+    <!--jornalNode会把数据写在以下路径,一般习惯下载var路径下-->
+    <!--jornalNode需要做选主机制, 还有过半机制, 因此node数量<=2时, 将无法过半,导致需要全部确认数据后, 才能通知NN-->
+    <property>
+        <name> </name>
+        <value>${hadoop.tmp.dir}/dfs/jn</value>
+    </property>
+    <!--当需要HA切换时,由哪个实现类做处理, 这里基本不需要修改-->
+    <property>
+        <name>dfs.client.failover.proxy.provider.mycluster</name>
+        <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+    </property>
+    <!--如何发出这些信号给分布式集群? 由两种方式, 第一种是写脚本, 第二种是ssh,免密方式是最简单的,这里的免密需要在ZKFC(FailoverControllerActive/FailoverControllerStandby)和NN(NameNode)之间做免密, 也需要ZKFC到另一台NN做免密, 因此免密使用的场景:1 管理脚本; 2 使用ZKFC-->
+    <property>
+        <name>dfs.ha.fencing.methods</name>
+        <value>sshfence</value>
+    </property>
+    <property>
+        <name>dfs.ha.fencing.ssh.connect-timeout</name>
+        <value>30000</value>
+    </property>
+    <!--免密登陆的私钥路径-->
+    <property>
+        <name>dfs.ha.fencing.ssh.private-key-files</name>
+        <value>/root/.ssh/id_rsa</value>
+    </property>
+    <!--这里发现, 像NNJN,都需要手动配置指定, 为什么ZKFC不需要配置, 因此ZKFC一般都需要和NN放在同一节点(不同节点会有网络,IO问题),因此只需要开启或者关闭即可-->
+    <!--开启ZKFC进程 启动NN故障自动切换-->
+    <property>
+        <name>dfs.ha.automatic-failover.enabled</name>
+        <value>true</value>
+    </property>
+</configuration>
