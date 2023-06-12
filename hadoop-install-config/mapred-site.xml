@@ -24,17 +24,45 @@
     <!--这里使用HADOOP_HOME下的jar包-->
     <property>
         <name>mapreduce.application.classpath</name>
-        <value>$HADOOP_HOME/share/hadoop/mapreduce/*:$HADOOP_HOME/share/hadoop/mapreduce/lib/*</value>
+        <value>${HADOOP_HOME}/share/hadoop/mapreduce/*:${HADOOP_HOME}/share/hadoop/mapreduce/lib/*</value>
     </property>
     <property>
-        <!--设置mapreduce的历史服务器安装在BigData01机器上-->
-        <name>mapreduce.jobhistory.address</name>
-        <value>hdp1.com:10020</value>
+        <name>mapreduce.application.classpath</name>
+        <value>
+            ${HADOOP_HOME}/etc/*,
+            ${HADOOP_HOME}/etc/hadoop/*,
+            ${HADOOP_HOME}/lib/*,
+            ${HADOOP_HOME}/share/hadoop/common/*,
+            ${HADOOP_HOME}/share/hadoop/common/lib/*,
+            ${HADOOP_HOME}/share/hadoop/mapreduce/*,
+            ${HADOOP_HOME}/share/hadoop/mapreduce/lib-examples/*,
+            ${HADOOP_HOME}/share/hadoop/hdfs/*,
+            ${HADOOP_HOME}/share/hadoop/hdfs/lib/*,
+            ${HADOOP_HOME}/share/hadoop/yarn/*,
+            ${HADOOP_HOME}/share/hadoop/yarn/lib/*,
+        </value>
     </property>
+    <property>
+        <name>yarn.app.mapreduce.am.env</name>
+        <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+    </property>
+    <property>
+        <name>mapreduce.map.env</name>
+        <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.env</name>
+        <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+    </property>
+    <!--    <property>-->
+    <!--        &lt;!&ndash;设置mapreduce的历史服务器安装在BigData01机器上&ndash;&gt;-->
+    <!--        <name>mapreduce.jobhistory.address</name>-->
+    <!--        <value>hdp1.com:10020</value>-->
+    <!--    </property>-->
 
-    <property>
-        <!--设置历史服务器的web页面地址和端口号-->
-        <name>mapreduce.jobhistory.webapp.address</name>
-        <value>hdp1.com:19888</value>
-    </property>
+    <!--    <property>-->
+    <!--        &lt;!&ndash;设置历史服务器的web页面地址和端口号&ndash;&gt;-->
+    <!--        <name>mapreduce.jobhistory.webapp.address</name>-->
+    <!--        <value>hdp1.com:19888</value>-->
+    <!--    </property>-->
 </configuration>
