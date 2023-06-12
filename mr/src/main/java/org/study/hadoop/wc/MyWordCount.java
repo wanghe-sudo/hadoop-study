@@ -12,13 +12,15 @@ import java.io.IOException;
 
 public class MyWordCount {
     public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
+        // 本地跑，这一步设置hdfs用户
+        System.setProperty("HADOOP_USER_NAME", "root");
         Configuration configuration = new Configuration();
 
         // Specify various job-specific parameters
         Job job = Job.getInstance(configuration);
         TextInputFormat.addInputPath(job, new Path("/data/wc/input"));
 
-        TextOutputFormat.setOutputPath(job, new Path("/data/wc/output"));
+        TextOutputFormat.setOutputPath(job, new Path("/data/wc/output2"));
 
         job.setJarByClass(MyWordCount.class);
         job.setJobName("MyWordCount");
