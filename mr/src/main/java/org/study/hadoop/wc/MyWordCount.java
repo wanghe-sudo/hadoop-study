@@ -15,7 +15,11 @@ public class MyWordCount {
         // 本地跑，这一步设置hdfs用户
         System.setProperty("HADOOP_USER_NAME", "root");
         Configuration configuration = new Configuration();
-
+        // 本来准备看看这个属性，但是会打印null，因为conf只会在加载完后才会初始化参数
+        System.out.printf("mapreduce.framework.name=%s\n", configuration.get("mapreduce.framework.name"));
+        // 本地方式，将需要将hadoop安装在本地，并且需要将hadoop.dll下载下来，放至c:\windows\system32下，
+        // 设置环境变量 HADOOP_HOME
+        configuration.set("mapreduce.framework.name","local");
         // 【重点】：让框架知道是windows异构平台
         configuration.set("mapreduce.app-submission.cross-platform", "true");
         // Specify various job-specific parameters
@@ -24,7 +28,7 @@ public class MyWordCount {
         job.setJar("D:\\workspace\\codesource\\java\\hadoop-study\\mr\\target\\mr-1.0.jar");
         TextInputFormat.addInputPath(job, new Path("/data/wc/input"));
         // 【重点】：每次注意，需要换一个路径
-        TextOutputFormat.setOutputPath(job, new Path("/data/wc/output4"));
+        TextOutputFormat.setOutputPath(job, new Path("/data/wc/output5"));
         job.setJarByClass(MyWordCount.class);
         job.setJobName("MyWordCount");
         job.setMapperClass(MyMapper.class);
