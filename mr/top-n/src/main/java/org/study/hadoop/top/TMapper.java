@@ -1,14 +1,19 @@
 package org.study.hadoop.top;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.util.StringUtils;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 /**
  * Mapper<LongWritable, Text,TKey,Integer>
@@ -34,6 +39,8 @@ public class TMapper extends Mapper<LongWritable, Text, TKey, IntWritable> {
         mkey.setMonth(localDateTime.getMonthValue());
         mkey.setDay(localDateTime.getDayOfMonth());
         mkey.setTemperature(Integer.parseInt(strs[2]));
+        //从字典中拿
+        mkey.setLocation(dict.get(strs[1]));
         // 可以不要value！
         mvalue.set(Integer.parseInt(strs[2]));
         // 写入上下文
@@ -45,4 +52,16 @@ public class TMapper extends Mapper<LongWritable, Text, TKey, IntWritable> {
         return LocalDateTime.parse(dateTime, pattern);
     }
 
+    Map<String, String> dict = new HashedMap();
+
+    @Override
+    protected void setup(Mapper<LongWritable, Text, TKey, IntWritable>.Context context) throws IOException, InterruptedException {
+        URI[] files = context.getCacheFiles();
+        // 因为在本例中，只有一个，这里直接取index=0的文件
+        BufferedReader reader = new BufferedReader(new FileReader(files[0].getPath()));
+        reader.lines().forEach(line -> {
+            String[] split = line.split(",");
+            dict.put(split[0], split[1]);
+        });
+    }
 }

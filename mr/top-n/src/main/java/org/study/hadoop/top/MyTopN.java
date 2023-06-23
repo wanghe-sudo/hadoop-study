@@ -9,6 +9,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.IOException;
+import java.net.URI;
 
 public class MyTopN {
     public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
@@ -20,14 +21,16 @@ public class MyTopN {
         Configuration conf = new Configuration();
         // 【重点】：让框架知道是windows异构平台
         conf.set("mapreduce.app-submission.cross-platform", "true");
-        conf.set("mapreduce.framework.name","local");
+        // conf.set("mapreduce.framework.name", "local");
 
         // 将-D的参数剔除后，剩余的参数，-D的参数，已经在new configuration的时候注入进去了
         String[] others = new GenericOptionsParser(conf, args).getRemainingArgs();
 
         Job job = Job.getInstance(conf);
 
-        job.setJarByClass(MyTopN.class);
+        // job.setJarByClass(MyTopN.class);
+        // 需要集群模式
+        job.setJar("D:\\workspace\\codesource\\java\\hadoop-study\\mr\\top-n\\target\\top-n-1.0.jar");
         job.setJobName("TopN");
 
         // 初学者，关注的是client端的代码梳理：因为把这块写明白了，其实你也就真的知道这个作业的开发原理：
@@ -62,6 +65,12 @@ public class MyTopN {
 
         //combine 暂时先不处理Combiner
         // job.setCombinerClass();
+
+        // 将hdfs上的文件缓存到datanode节点本地
+        // 【因此】 要是再运行mr程序，则需提交到hdfs上，集群模式，on yarn
+        URI[] uris = {};
+        URI.create("/data/temperature/intput/dict.txt");
+        job.setCacheFiles(uris);
 
         // reduce环节
         //groupingComparator

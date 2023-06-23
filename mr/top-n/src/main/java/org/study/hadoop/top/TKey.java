@@ -18,6 +18,11 @@ public class TKey implements WritableComparable<TKey> {
     private int temperature;
 
     /**
+     * 码值
+     */
+    private String location;
+
+    /**
      * 比较方法
      *
      * @param that the object to be compared.
@@ -50,6 +55,7 @@ public class TKey implements WritableComparable<TKey> {
         out.writeInt(month);
         out.writeInt(day);
         out.writeInt(temperature);
+        out.writeUTF(location);
 
     }
 
@@ -65,5 +71,6 @@ public class TKey implements WritableComparable<TKey> {
         this.month = in.readInt();
         this.day = in.readInt();
         this.temperature = in.readInt();
+        this.location = in.readUTF();
     }
 }

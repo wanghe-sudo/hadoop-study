@@ -26,7 +26,7 @@ public class TReducer extends Reducer<TKey, IntWritable, Text, IntWritable> {
             IntWritable val = iterator.next();
             // 第一条数据
             if (flag == 0) {
-                rkey.set(key.getYear() + "-" + key.getMonth() + "-" + key.getDay());
+                rkey.set(key.getYear() + "-" + key.getMonth() + "-" + key.getDay() + "-" + key.getLocation());
                 rval.set(key.getTemperature());
                 context.write(rkey, rval);
                 flag++;
@@ -35,7 +35,7 @@ public class TReducer extends Reducer<TKey, IntWritable, Text, IntWritable> {
 
             // 第二条数据
             if (flag != 0 && day != key.getDay()) {
-                rkey.set(key.getYear() + "-" + key.getMonth() + "-" + key.getDay());
+                rkey.set(key.getYear() + "-" + key.getMonth() + "-" + key.getDay() + "-" + key.getLocation());
                 rval.set(key.getTemperature());
                 context.write(rkey, rval);
                 break;
