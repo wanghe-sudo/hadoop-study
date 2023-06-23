@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <!--本地运行：local-->
+        <value>yarn</value>
+    </property>
+    <!--这里使用HADOOP_HOME下的jar包-->
+    <property>
+        <name>mapreduce.application.classpath</name>
+        <value>${HADOOP_HOME}/share/hadoop/mapreduce/*:${HADOOP_HOME}/share/hadoop/mapreduce/lib/*</value>
+    </property>
+    <property>
+        <name>mapreduce.application.classpath</name>
+        <value>
+            ${HADOOP_HOME}/etc/*,
+            ${HADOOP_HOME}/etc/hadoop/*,
+            ${HADOOP_HOME}/lib/*,
+            ${HADOOP_HOME}/share/hadoop/common/*,
+            ${HADOOP_HOME}/share/hadoop/common/lib/*,
+            ${HADOOP_HOME}/share/hadoop/mapreduce/*,
+            ${HADOOP_HOME}/share/hadoop/mapreduce/lib-examples/*,
+            ${HADOOP_HOME}/share/hadoop/hdfs/*,
+            ${HADOOP_HOME}/share/hadoop/hdfs/lib/*,
+            ${HADOOP_HOME}/share/hadoop/yarn/*,
+            ${HADOOP_HOME}/share/hadoop/yarn/lib/*,
+        </value>
+    </property>
+    <property>
+        <name>yarn.app.mapreduce.am.env</name>
+        <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+    </property>
+    <property>
+        <name>mapreduce.map.env</name>
+        <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.env</name>
+        <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+    </property>
+    <!--    <property>-->
+    <!--        &lt;!&ndash;设置mapreduce的历史服务器安装在BigData01机器上&ndash;&gt;-->
+    <!--        <name>mapreduce.jobhistory.address</name>-->
+    <!--        <value>hdp1.com:10020</value>-->
+    <!--    </property>-->
+
+    <!--    <property>-->
+    <!--        &lt;!&ndash;设置历史服务器的web页面地址和端口号&ndash;&gt;-->
+    <!--        <name>mapreduce.jobhistory.webapp.address</name>-->
+    <!--        <value>hdp1.com:19888</value>-->
+    <!--    </property>-->
+</configuration>

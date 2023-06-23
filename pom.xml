@@ -12,6 +12,7 @@
         <module>mr</module>
         <module>hadoop-install-config</module>
         <module>spark-install-config</module>
+        <module>mr/top-n</module>
     </modules>
 
     <properties>
