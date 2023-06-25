@@ -82,8 +82,10 @@
 export JAVA_HOME=/opt/jdk-8
 export SCALA_HOME=/opt/scala-2.12.17
 export HADOOP_CONF_DIR=/opt/hdp/hadoop-3.3.5/etc/hadoop
+# HA模式，不需要配置master
 # SPARK_MASTER_HOST=hdp1.com
 # 配置zk作为ha依赖
+# 设置 Spark 集群的恢复模式，这里设置为使用 Zookeeper，即整个集群状态及其恢复是通过 Zookeeper 来进行分布式协作维护的。
 export SPARK_DAEMON_JAVA_OPTS="-Dspark.deploy.recoveryMode=ZOOKEEPER -Dspark.deploy.zookeeper.url=hdp3.com:2181,hdp4.com:2181,hdp5.com:2181 -Dspark.deploy.zookeeper.dir=/spark-ha"
 # hadoop HA配置
 export SPARK_HISTORY_OPTS="-Dspark.history.ui.port=18080 -Dspark.history.retainedApplications=30 -Dspark.history.fs.logDirectory=hdfs://mycluster/spark-jobhistory"
