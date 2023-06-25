@@ -68,8 +68,9 @@ public class MyTopN {
 
         // 将hdfs上的文件缓存到datanode节点本地
         // 【因此】 要是再运行mr程序，则需提交到hdfs上，集群模式，on yarn
-        URI[] uris = {};
-        URI.create("/data/temperature/intput/dict.txt");
+        URI dictFile = URI.create("/data/temperature/input/dict.txt");
+        URI[] uris = {dictFile};
+
         job.setCacheFiles(uris);
 
         // reduce环节

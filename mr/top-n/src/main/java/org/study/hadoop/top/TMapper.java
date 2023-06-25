@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -52,7 +53,7 @@ public class TMapper extends Mapper<LongWritable, Text, TKey, IntWritable> {
         return LocalDateTime.parse(dateTime, pattern);
     }
 
-    Map<String, String> dict = new HashedMap();
+    Map<String, String> dict = new HashMap<>();
 
     @Override
     protected void setup(Mapper<LongWritable, Text, TKey, IntWritable>.Context context) throws IOException, InterruptedException {
