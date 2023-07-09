@@ -76,7 +76,7 @@
     <!--jornalNode会把数据写在以下路径,一般习惯下载var路径下-->
     <!--jornalNode需要做选主机制, 还有过半机制, 因此node数量<=2时, 将无法过半,导致需要全部确认数据后, 才能通知NN-->
     <property>
-        <name> </name>
+        <name>dfs.journalnode.edits.dir</name>
         <value>${hadoop.tmp.dir}/dfs/jn</value>
     </property>
     <!--当需要HA切换时,由哪个实现类做处理, 这里基本不需要修改-->
