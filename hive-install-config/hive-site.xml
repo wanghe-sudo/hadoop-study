@@ -30,7 +30,7 @@
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
     <value>
-      jdbc:mysql://hdp4.com:3306/hive?useSSL=fasle&amp;characterEncoding=utf8&amp;serverTimezone=Asia/Shanghai&amp;createDatabaseIfNotExist=true</value>
+      jdbc:mysql://hdp4.com:3306/hive?useSSL=false&amp;characterEncoding=utf8&amp;serverTimezone=Asia/Shanghai&amp;createDatabaseIfNotExist=true</value>
     <description>
       JDBC connect string for a JDBC metastore.
       To use SSL to encrypt/authenticate the connection, provide database-specific SSL flag in the
